@@ -683,6 +683,33 @@ describe Docx::Document do
     after { File.delete(@new_doc_path) if @new_doc_path && File.exist?(@new_doc_path) }
   end
 
+  describe 'reading and manipulating document sdt elements' do
+    before do
+      @doc = Docx::Document.open(@fixtures_path + '/sdt_elements.docx')
+    end
+
+    it 'find sdt elements' do
+      expect(@doc.sdt_elements.count).to eq(1)
+    end
+
+    it 'read text of sdt element' do
+      expect(@doc.sdt_elements.first.text).to eq('world')
+    end
+
+    it 'replace text' do
+      @new_doc_path = @fixtures_path + '/new_save.docx'
+
+      @doc.sdt_elements.first.text = 'user'
+      @doc.save @new_doc_path
+
+      new_doc = Docx::Document.open(@new_doc_path)
+
+      expect(new_doc.sdt_elements.first.text).to eq('user')
+    end
+
+    after { File.delete(@new_doc_path) if @new_doc_path && File.exist?(@new_doc_path) }
+  end
+
   describe '#to_html' do
     before do
       @doc = Docx::Document.open(@fixtures_path + '/internal-links.docx')

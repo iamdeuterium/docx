@@ -61,6 +61,10 @@ module Docx
       new(path, &block)
     end
 
+    def sdt_elements
+      @doc.xpath('//w:sdt').map { |e| parse_sdt_element_from e }
+    end
+
     def paragraphs
       @doc.xpath('//w:document//w:body/w:p').map { |p_node| parse_paragraph_from p_node }
     end
@@ -223,6 +227,10 @@ module Docx
 
     def parse_table_from(t_node)
       Elements::Containers::Table.new(t_node)
+    end
+
+    def parse_sdt_element_from(b_node)
+      Elements::Containers::SdtElement.new(b_node)
     end
   end
 end

@@ -106,6 +106,12 @@ module Docx
           new_element.append_to(element)
           new_element
         end
+
+        def create_within_node(node)
+          new_element = self.new(Nokogiri::XML::Node.new("w:#{self.tag}", node.document))
+          node.add_child(new_element.node)
+          new_element
+        end
       end
     end
   end

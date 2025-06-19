@@ -12,6 +12,11 @@ module Docx
           'std'
         end
 
+        def initialize(node)
+          @node = node
+          @properties_tag = 'sdtPr'
+        end
+
         def alias
           at_xpath('./w:sdtPr/w:alias/@w:val')&.value
         end
@@ -24,7 +29,6 @@ module Docx
             new_r.text = content
           else
             replaced = false
-
             text_runs.each do |r|
               unless r.text.to_s.empty?
                 if replaced
@@ -48,11 +52,6 @@ module Docx
 
         def content_node
           @node.at_xpath('./w:sdtContent')
-        end
-
-        def initialize(node)
-          @node = node
-          @properties_tag = 'sdtPr'
         end
 
         alias_method :text, :to_s
